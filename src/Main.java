@@ -3,16 +3,23 @@ import java.util.Scanner;
 
 public class Main {
     static Contiguous  ctgs =new Contiguous ();
-    private ArrayList<User>users=new ArrayList <> ();
+
 
     public static void main (String[] args) {
+        ArrayList<User>users=new ArrayList <> ();
         User admin = new User ();
         ArrayList<Triplet<String, Integer, Integer>> t = new ArrayList <> ();
         t.add (new Triplet <> (ctgs.getRoot ().getDirectoryPath (),1,1));
+        ctgs.CreateFolder ("VFSD:/Folder1");
         admin.setUsername ("admin");
         admin.setPassword ("admin");
         admin.setRole ("admin");
         admin.setCabilities (t);
+        users.add (admin);
+        User us = new User ();
+        us.setUsername ("ahmed");
+        us.setPassword ("pass123");
+        us.setCabilities (t);
 
 
     }
@@ -21,7 +28,7 @@ public class Main {
         System.out.println ("Current User:- " + us.getUsername ());
         System.out.println ("your role:- "+us.getRole ());
     }
-    private void CUser()
+    private void CUser(ArrayList<User>users)
     {
         Scanner sc= new Scanner(System.in);
         System.out.print ("Enter Username: ");
@@ -44,7 +51,7 @@ public class Main {
     {
 
     }
-    boolean Grant()
+    boolean Grant(ArrayList<User>users)
     {
         Scanner sc= new Scanner(System.in);
         String un =sc.nextLine ();
@@ -64,11 +71,66 @@ public class Main {
                     System.out.println ("01) 0 \t   1 \t No Create, Delete");
                     System.out.println ("10) 1 \t   0 \t Create   , No Delete");
                     System.out.println ("11) 1 \t   1 \t Create   , Delete");
-
-                }
-
-            }
+                    switch (parse[2]) {
+                        case "00" -> {
+                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                            int i = 0;
+                            for (var p : t){
+                                if(p.getFirst ().equals (parse[1])) {
+                                    t.remove (i);
+                                    t.add (i,new Triplet <> (parse[1],0,0));
+                                    us.setCabilities (t);
+                                    return true;
+                                }
+                                i++;
+                            }
+                        }
+                        case "01" -> {
+                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                            int i = 0;
+                            for (var p : t){
+                                if(p.getFirst ().equals (parse[1])) {
+                                    t.remove (i);
+                                    t.add (i,new Triplet <> (parse[1],0,1));
+                                    us.setCabilities (t);
+                                    return true;
+                                }
+                                i++;
+                            }
+                        }
+                        case "10" -> {
+                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                            int i = 0;
+                            for (var p : t){
+                                if(p.getFirst ().equals (parse[1])) {
+                                    t.remove (i);
+                                    t.add (i,new Triplet <> (parse[1],1,0));
+                                    us.setCabilities (t);
+                                    return true;
+                                }
+                                i++;
+                            }
+                        }
+                        case "11" -> {
+                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                            int i = 0;
+                            for (var p : t){
+                                if(p.getFirst ().equals (parse[1])) {
+                                    t.remove (i);
+                                    t.add (i,new Triplet <> (parse[1],1,1));
+                                    us.setCabilities (t);
+                                    return true;
+                                }
+                                i++;
+                            }
+                        }
+                        default -> System.out.println ("Capability not exist ");
+                    }
+                }else
+                    System.out.println ("File not exist");
+            }else
+                System.out.println ("User not exist");
         }
-        return  true;
+        return  false;
     }
 }
