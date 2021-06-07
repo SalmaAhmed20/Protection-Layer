@@ -11,6 +11,8 @@ public class Main {
         ArrayList<Triplet<String, Integer, Integer>> t = new ArrayList <> ();
         t.add (new Triplet <> (ctgs.getRoot ().getDirectoryPath (),1,1));
         ctgs.CreateFolder ("VFSD:/Folder1");
+        t.add (new Triplet <> ("VFSD:/Folder1",1,1));
+        ctgs.DisplayDiskStructure (ctgs.getRoot ());
         admin.setUsername ("admin");
         admin.setPassword ("admin");
         admin.setRole ("admin");
@@ -20,6 +22,14 @@ public class Main {
         us.setUsername ("ahmed");
         us.setPassword ("pass123");
         us.setCabilities (t);
+        users.add (us);
+        for (var p:us.getCabilities ()){
+            System.out.println (p.getFirst ()+" "+p.getSecond ()+" "+p.getThird ());
+        }
+        Grant (users);
+        for (var p:us.getCabilities ()){
+            System.out.println (p.getFirst ()+" "+p.getSecond ()+" "+p.getThird ());
+        }
 
 
     }
@@ -51,86 +61,86 @@ public class Main {
     {
 
     }
-    boolean Grant(ArrayList<User>users)
+    static boolean Grant (ArrayList <User> users)
     {
         Scanner sc= new Scanner(System.in);
         String un =sc.nextLine ();
         String[] parse=un.split (" ");
         for (var us:users){
-            if(us.getUsername ().equals (parse[0]))
-            {
+            if(us.getUsername ().equals (parse[0])) {
                 String[] Folder = parse[1].split ("/");
-                File F = new File ();
-                F.setName (Folder[Folder.length - 1]);
-                F.setFilePath (parse[1]);
-                Directory dir = ctgs.DirExist (ctgs.getRoot (),Folder,1,Folder.length-2);
-                if(dir !=null)
-                {
+                Directory dir = ctgs.DirExist2 (ctgs.getRoot (),Folder,0,Folder.length - 2);
+                //System.out.println (dir.getName ());
+                if(dir != null) {
                     System.out.println ("Create \t Delete \t Comment");
                     System.out.println ("00) 0 \t   0 \t No Create,No Delete");
                     System.out.println ("01) 0 \t   1 \t No Create, Delete");
                     System.out.println ("10) 1 \t   0 \t Create   , No Delete");
                     System.out.println ("11) 1 \t   1 \t Create   , Delete");
-                    switch (parse[2]) {
-                        case "00" -> {
-                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
-                            int i = 0;
-                            for (var p : t){
-                                if(p.getFirst ().equals (parse[1])) {
-                                    t.remove (i);
-                                    t.add (i,new Triplet <> (parse[1],0,0));
-                                    us.setCabilities (t);
-                                    return true;
-                                }
-                                i++;
+                    //System.out.println (parse[2]);
+                    if(parse[2].equals ("00")) {
+                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        int i = 0;
+                        for (var p : t){
+                            //System.out.println (p.getFirst ());
+                            if(p.getFirst ().equals (parse[1])) {
+                                System.out.println (p.getFirst ());
+                                t.remove (i);
+                                t.add (i,new Triplet <> (parse[1],0,0));
+                                //for (var p2 : t)
+                                    //System.out.println (p2.getFirst ()+p2.getSecond ()+p2.getThird ());
+                                us.setCabilities (t);
+                                return true;
                             }
+                            i++;
                         }
-                        case "01" -> {
-                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
-                            int i = 0;
-                            for (var p : t){
-                                if(p.getFirst ().equals (parse[1])) {
-                                    t.remove (i);
-                                    t.add (i,new Triplet <> (parse[1],0,1));
-                                    us.setCabilities (t);
-                                    return true;
-                                }
-                                i++;
-                            }
-                        }
-                        case "10" -> {
-                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
-                            int i = 0;
-                            for (var p : t){
-                                if(p.getFirst ().equals (parse[1])) {
-                                    t.remove (i);
-                                    t.add (i,new Triplet <> (parse[1],1,0));
-                                    us.setCabilities (t);
-                                    return true;
-                                }
-                                i++;
-                            }
-                        }
-                        case "11" -> {
-                            ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
-                            int i = 0;
-                            for (var p : t){
-                                if(p.getFirst ().equals (parse[1])) {
-                                    t.remove (i);
-                                    t.add (i,new Triplet <> (parse[1],1,1));
-                                    us.setCabilities (t);
-                                    return true;
-                                }
-                                i++;
-                            }
-                        }
-                        default -> System.out.println ("Capability not exist ");
                     }
-                }else
-                    System.out.println ("File not exist");
-            }else
-                System.out.println ("User not exist");
-        }
-        return  false;
+                    if(parse[2].equals ("01")) {
+                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        int i = 0;
+                        for (var p : t){
+                            if(p.getFirst ().equals (parse[1])) {
+                                t.remove (i);
+                                t.add (i,new Triplet <> (parse[1],0,1));
+                                us.setCabilities (t);
+                                return true;
+                            }
+                            i++;
+                        }
+                    }
+                    if(parse[2].equals ("10")) {
+                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        int i = 0;
+                        for (var p : t){
+                            if(p.getFirst ().equals (parse[1])) {
+                                t.remove (i);
+                                t.add (i,new Triplet <> (parse[1],1,0));
+                                us.setCabilities (t);
+                                return true;
+                            }
+                            i++;
+                        }
+                    }
+                    if(parse[2].equals ("11")) {
+                        System.out.println ("");
+                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        int i = 0;
+                        for (var p : t){
+                            if(p.getFirst ().equals (parse[1])) {
+                                t.remove (i);
+                                t.add (i,new Triplet <> (parse[1],1,1));
+                                us.setCabilities (t);
+                                return true;
+                            }
+                            i++;
+                        }
+                    }else System.out.println ("Capability not exist ");
+                }else {
+                    System.out.println ("Folder not exist");
+                    return false;
+                }
+            }}
+        System.out.println ("User not exist");
+                return  false;
     }
 }
