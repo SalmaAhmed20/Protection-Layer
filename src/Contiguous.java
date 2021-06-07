@@ -511,4 +511,7 @@ public class Contiguous {
             fileNotFoundException.printStackTrace ();
         }
     }
+    public Directory getRoot () {
+        return root;
+    }
 }
