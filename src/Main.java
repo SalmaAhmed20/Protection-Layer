@@ -2,16 +2,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    static Contiguous  ctgs =new Contiguous ();
-
+    static Contiguous ctgs = new Contiguous ();
 
     public static void main (String[] args) {
-        ArrayList<User>users=new ArrayList <> ();
+        ArrayList<User> users = new ArrayList<> ();
         User admin = new User ();
-        ArrayList<Triplet<String, Integer, Integer>> t = new ArrayList <> ();
-        t.add (new Triplet <> (ctgs.getRoot ().getDirectoryPath (),1,1));
+        ArrayList<Triplet<String, Integer, Integer>> t = new ArrayList<> ();
+        t.add (new Triplet<> (ctgs.getRoot ().getDirectoryPath (),1,1));
         ctgs.CreateFolder ("VFSD:/Folder1");
-        t.add (new Triplet <> ("VFSD:/Folder1",1,1));
+        t.add (new Triplet<> ("VFSD:/Folder1",1,1));
         ctgs.DisplayDiskStructure (ctgs.getRoot ());
         admin.setUsername ("admin");
         admin.setPassword ("admin");
@@ -21,31 +20,38 @@ public class Main {
         User us = new User ();
         us.setUsername ("ahmed");
         us.setPassword ("pass123");
-        us.setCabilities (t);
+        us.setCabilities (new ArrayList<> (t));
         users.add (us);
-        for (var p:us.getCabilities ()){
-            System.out.println (p.getFirst ()+" "+p.getSecond ()+" "+p.getThird ());
+        for (var uu:users){
+            TellUser(uu);
+            for (var p: uu.getCabilities ()){
+                System.out.println (p.getFirst () + " " + p.getSecond () + " " + p.getThird ());
+            }
+        }
+        for (var p: us.getCabilities ()){
+            System.out.println (p.getFirst () + " " + p.getSecond () + " " + p.getThird ());
         }
         Grant (users);
-        for (var p:us.getCabilities ()){
-            System.out.println (p.getFirst ()+" "+p.getSecond ()+" "+p.getThird ());
+        for (var uu:users){
+            TellUser(uu);
+            for (var p: uu.getCabilities ()){
+                System.out.println (p.getFirst () + " " + p.getSecond () + " " + p.getThird ());
+            }
         }
 
+    }
 
-    }
-    private void TellUser(User us)
-    {
+    public static void TellUser (User us) {
         System.out.println ("Current User:- " + us.getUsername ());
-        System.out.println ("your role:- "+us.getRole ());
+        System.out.println ("your role:- " + us.getRole ());
     }
-    private void CUser(ArrayList<User>users)
-    {
-        Scanner sc= new Scanner(System.in);
+
+    private void CUser (ArrayList<User> users) {
+        Scanner sc = new Scanner (System.in);
         System.out.print ("Enter Username: ");
         String un = sc.nextLine ();
-        for (var us:users){
-            if(us.getUsername ().equals (un))
-            {
+        for (var us: users){
+            if(us.getUsername ().equals (un)) {
                 System.out.println ("\nUser is already exist");
                 return;
             }
@@ -57,16 +63,17 @@ public class Main {
         us.setPassword (pass);
         users.add (us);
     }
-    void login()
-    {
+
+    void login () {
 
     }
-    static boolean Grant (ArrayList <User> users)
-    {
-        Scanner sc= new Scanner(System.in);
-        String un =sc.nextLine ();
-        String[] parse=un.split (" ");
-        for (var us:users){
+
+    static boolean Grant (ArrayList<User> users) {
+        Scanner sc = new Scanner (System.in);
+        String un = sc.nextLine ();
+        String[] parse = un.split (" ");
+        int j =0;
+        for (var us: users){
             if(us.getUsername ().equals (parse[0])) {
                 String[] Folder = parse[1].split ("/");
                 Directory dir = ctgs.DirExist2 (ctgs.getRoot (),Folder,0,Folder.length - 2);
@@ -79,43 +86,47 @@ public class Main {
                     System.out.println ("11) 1 \t   1 \t Create   , Delete");
                     //System.out.println (parse[2]);
                     if(parse[2].equals ("00")) {
-                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        ArrayList<Triplet<String, Integer, Integer>> t = us.getCabilities ();
                         int i = 0;
-                        for (var p : t){
+                        for (var p: t){
                             //System.out.println (p.getFirst ());
                             if(p.getFirst ().equals (parse[1])) {
                                 System.out.println (p.getFirst ());
                                 t.remove (i);
-                                t.add (i,new Triplet <> (parse[1],0,0));
-                                //for (var p2 : t)
-                                    //System.out.println (p2.getFirst ()+p2.getSecond ()+p2.getThird ());
+                                t.add (i,new Triplet<> (parse[1],0,0));
                                 us.setCabilities (t);
+                                users.remove (j);
+                                users.add (j,us);
                                 return true;
                             }
                             i++;
                         }
                     }
                     if(parse[2].equals ("01")) {
-                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        ArrayList<Triplet<String, Integer, Integer>> t = us.getCabilities ();
                         int i = 0;
-                        for (var p : t){
+                        for (var p: t){
                             if(p.getFirst ().equals (parse[1])) {
                                 t.remove (i);
-                                t.add (i,new Triplet <> (parse[1],0,1));
+                                t.add (i,new Triplet<> (parse[1],0,1));
                                 us.setCabilities (t);
+                                users.remove (j);
+                                users.add (j,us);
                                 return true;
                             }
                             i++;
                         }
                     }
                     if(parse[2].equals ("10")) {
-                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        ArrayList<Triplet<String, Integer, Integer>> t = us.getCabilities ();
                         int i = 0;
-                        for (var p : t){
+                        for (var p: t){
                             if(p.getFirst ().equals (parse[1])) {
                                 t.remove (i);
-                                t.add (i,new Triplet <> (parse[1],1,0));
+                                t.add (i,new Triplet<> (parse[1],1,0));
                                 us.setCabilities (t);
+                                users.remove (j);
+                                users.add (j,us);
                                 return true;
                             }
                             i++;
@@ -123,13 +134,15 @@ public class Main {
                     }
                     if(parse[2].equals ("11")) {
                         System.out.println ("");
-                        ArrayList <Triplet <String, Integer, Integer>> t = us.getCabilities ();
+                        ArrayList<Triplet<String, Integer, Integer>> t = us.getCabilities ();
                         int i = 0;
-                        for (var p : t){
+                        for (var p: t){
                             if(p.getFirst ().equals (parse[1])) {
                                 t.remove (i);
-                                t.add (i,new Triplet <> (parse[1],1,1));
+                                t.add (i,new Triplet<> (parse[1],1,1));
                                 us.setCabilities (t);
+                                users.remove (j);
+                                users.add (j,us);
                                 return true;
                             }
                             i++;
@@ -139,8 +152,10 @@ public class Main {
                     System.out.println ("Folder not exist");
                     return false;
                 }
-            }}
+            }
+            j++;
+        }
         System.out.println ("User not exist");
-                return  false;
+        return false;
     }
 }
