@@ -5,8 +5,8 @@ public class Directory { private String directoryPath;
     private boolean deleted = false;
 
     public Directory ( ) {
-        directoryPath="root/";
-        name="root";
+        directoryPath=" VFSD:/";
+        name="VFSD";
 
     }
     public String getName ( ) {
