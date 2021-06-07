@@ -133,7 +133,6 @@ public class Main {
                         }
                     }
                     if(parse[2].equals ("11")) {
-                        System.out.println ("");
                         ArrayList<Triplet<String, Integer, Integer>> t = us.getCabilities ();
                         int i = 0;
                         for (var p: t){
