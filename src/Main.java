@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,6 +40,9 @@ public class Main {
                 System.out.println (p.getFirst () + " " + p.getSecond () + " " + p.getThird ());
             }
         }
+        Storeuserfile(users);
+        StoreCapabilities (users);
+
 
     }
 
@@ -156,5 +161,55 @@ public class Main {
         }
         System.out.println ("User not exist");
         return false;
+    }
+    static void Storeuserfile (ArrayList<User> users)
+    {
+        try{
+            FileWriter fWriter = new FileWriter ("user.txt");
+            for (var uu:users){
+                fWriter.write (uu.getUsername ()+","+uu.getPassword ()+"\n");
+            }
+            fWriter.close ();
+        }catch (IOException e){
+            e.printStackTrace ();
+        }
+    }
+    static void StoreCapabilities (ArrayList<User> users)
+    {
+        try{
+            FileWriter fWriter = new FileWriter ("capabilities.txt");
+            User s=users.get (0);
+            ArrayList<String>paths=new ArrayList<> ();
+            for (int i = 1 ; i < s.getCabilities ().size ()  ; i++){
+                paths.add (s.getCabilities ().get (i).getFirst ());
+
+            }
+            for (int i = 0 ; i < paths.size () ; i++){
+                fWriter.append (paths.get (i)+",");
+                for (int k = 1 ; k <users.size ()  ; k++){
+                    User cab = users.get (k);
+                    for (int j = 0 ; j < cab.getCabilities ().size () ; j++){
+                        if(cab.getCabilities ().get (j).getFirst ().equals (paths.get (i)))
+                        {
+                            if(k != users.size ()-1) {
+                                fWriter.append (cab.getUsername () + "," + cab.getCabilities ().get (j).getSecond () +
+                                        cab.getCabilities ().get (j).getThird () + ",");
+                            }
+                            else
+                            {
+                                fWriter.append (cab.getUsername () + "," + cab.getCabilities ().get (j).getSecond () +
+                                        cab.getCabilities ().get (j).getThird () );
+                            }
+                        }
+
+                    }
+                }
+            }
+            fWriter.close ();
+        }catch (IOException e){
+            e.printStackTrace ();
+        }
+
+
     }
 }
